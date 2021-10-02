@@ -11,13 +11,13 @@ ConfigDHCP() {
   option pxelinux.reboottime code 211 = unsigned integer 32;
   option architecture-type code 93 = unsigned integer 16;
 
-  subnet 192.168.70.0 netmask 255.255.255.0 {
-  	option routers 192.168.70.2;
-  	range 192.168.70.126 192.168.70.253;
+  subnet 192.168.22.0 netmask 255.255.255.0 {
+  	option routers 192.168.22.1;
+  	range 192.168.22.126 192.168.22.253;
 
   	class "pxeclients" {
   	  match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
-  	  next-server 192.168.70.20;
+  	  next-server 192.168.22.20;
 
   	  if option architecture-type = 00:07 {
   	    filename "shim.efi";
@@ -34,19 +34,19 @@ ConfigDHCP() {
   # allow bootp;
   # allow unknown-clients;
   #
-  # subnet 192.168.70.0
+  # subnet 192.168.22.0
   # netmask 255.255.255.0
   # {
-  #   range 192.168.70.100 192.168.70.199;
-  #   option domain-name-servers 192.168.70.2;
+  #   range 192.168.22.100 192.168.22.199;
+  #   option domain-name-servers 192.168.22.2;
   #   option domain-name "linuxlab.com";
-  #   option routers 192.168.70.2;
-  #   option broadcast-address 192.168.70.255;
+  #   option routers 192.168.22.2;
+  #   option broadcast-address 192.168.22.255;
   #   default-lease-time 600;
   #   max-lease-time 7200;
   #   class "pxeclients" {
   #         match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
-  #         next-server 192.168.70.20;
+  #         next-server 192.168.22.20;
   #
   #         if substring (option vendor-class-identifier, 15, 5) = "00009" {
   #           filename "grubx64.efi";
@@ -68,11 +68,11 @@ ConfigPxelinux() {
     menu title Passakorn's PXE Menu
     label 1^) Install CentOS7 Manual
     kernel /networkboot/centos7/vmlinuz
-    append initrd=/networkboot/centos7/initrd.img inst.repo=ftp://192.168.70.20/pub/centos7/
+    append initrd=/networkboot/centos7/initrd.img inst.repo=ftp://192.168.22.20/pub/centos7/
 
     label 2^) Install CentOS7 Kickstart
     kernel /networkboot/centos7/vmlinuz
-    append initrd=/networkboot/centos7/initrd.img inst.repo=ftp://192.168.70.20/pub/centos7 ks=ftp://192.168.70.20/pub/centos7/centos7_gui.cfg
+    append initrd=/networkboot/centos7/initrd.img inst.repo=ftp://192.168.22.20/pub/centos7 ks=ftp://192.168.22.20/pub/centos7/centos7_gui.cfg
 EOF
 }
 
@@ -83,12 +83,12 @@ ConfigEFI() {
     set timeout=60
 
     menuentry 'Install CentOS7 Manual' {
-            linuxefi /networkboot/centos7/vmlinuz inst.repo=ftp://192.168.70.20/pub/centos7/
+            linuxefi /networkboot/centos7/vmlinuz inst.repo=ftp://192.168.22.20/pub/centos7/
             initrdefi /networkboot/centos7/initrd.img
     }
 
     menuentry 'Install CentOS7 Kickstart' {
-        linuxefi /networkboot/centos7/vmlinuz inst.repo=ftp://192.168.70.20/pub/centos7/ inst.ks=ftp://192.168.70.20/pub/centos7/centos7_gui.cfg
+        linuxefi /networkboot/centos7/vmlinuz inst.repo=ftp://192.168.22.20/pub/centos7/ inst.ks=ftp://192.168.22.20/pub/centos7/centos7_gui.cfg
         initrdefi /networkboot/centos7/initrd.img
     }
 EOF
